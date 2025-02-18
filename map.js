@@ -21,6 +21,19 @@ var map = new ol.Map({
 //    source: kmlSource
 //});
 //map.addLayer(kmlLayer);
+//
+// Debug: Check if KML loads
+//kmlSource.once('change', function () {
+//    console.log("KML State:", kmlSource.getState());
+//    console.log("Number of features:", kmlSource.getFeatures().length);
+//    
+//    if (kmlSource.getFeatures().length === 0) {
+//        alert("No features found in KML. Check file structure or OpenLayers compatibility.");
+//    } else {
+//        var extent = kmlSource.getExtent();
+//        map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
+//    }
+//});
 
 var gpxSource = new ol.source.Vector({
     url: 'data/full-at.gpx',
@@ -41,6 +54,131 @@ gpxSource.on('error', function (evt) {
     console.error("Error loading GPX file:", evt);
 });
 
+// function to process LineString and extract elevation
+function processLineString(lineString, elevations, distances, totalDistance, totalGain, totalLoss, lastElevation) {
+    var coords = lineString.getCoordinates();
+
+    for (var i = 0; i < coords.length; i++) {
+        var coord = coords[i];
+        var lonLat = ol.proj.toLonLat(coord);
+
+        var elevation = coord[2]; // Extract elevation (Z coordinate)
+        if (isNaN(elevation)) elevation = 0; // Ensure no NaN values
+
+        elevations.push(elevation);
+
+        if (lastElevation !== null) {
+            var diff = elevation - lastElevation;
+            if (diff > 0) {
+                totalGain += diff;
+            } else {
+                totalLoss += Math.abs(diff);
+            }
+        }
+        lastElevation = elevation;
+
+        if (i > 0) {
+            var prevCoord = ol.proj.toLonLat(coords[i - 1]);
+            var distance = haversineDistance(prevCoord, lonLat);
+            totalDistance += distance;
+        }
+        distances.push(totalDistance.toFixed(2)); // Store cumulative distance
+    }
+
+    return {totalDistance, totalGain, totalLoss};
+}
+
+// Function to extract elevation data
+function extractElevationData(gpxSource) {
+    var elevations = [];
+    var distances = [];
+    var totalDistance = 0;
+    var totalGain = 0;
+    var totalLoss = 0;
+    var lastElevation = null;
+
+    gpxSource.getFeatures().forEach((feature) => {
+        var geom = feature.getGeometry();
+
+        if (geom instanceof ol.geom.LineString) {
+            total = processLineString(geom, elevations, distances, totalDistance, totalGain, totalLoss, lastElevation);
+            totalDistance = total.totalDistance;
+            totalGain = total.totalGain;
+            totalLoss = total.totalLoss;
+        } else if (geom instanceof ol.geom.MultiLineString) {
+            geom.getLineStrings().forEach((lineString) => {
+                total = processLineString(lineString, elevations, distances, totalDistance, totalGain, totalLoss, lastElevation);
+                totalDistance = total.totalDistance;
+                totalGain = total.totalGain;
+                totalLoss = total.totalLoss;
+            });
+        }
+    });
+
+    console.log("Total Distance:", totalDistance.toFixed(2), "km");
+    console.log("Total Gain:", totalGain.toFixed(2), "m");
+    console.log("Total Loss:", totalLoss.toFixed(2), "m");
+
+    document.getElementById('totalDistance').textContent = totalDistance.toFixed(2) + " km";
+    document.getElementById('elevationGain').textContent = totalGain.toFixed(2) + " m";
+    document.getElementById('elevationLoss').textContent = totalLoss.toFixed(2) + " m";
+    
+    return { distances, elevations };
+}
+
+
+// Haversine formula to calculate distance
+function haversineDistance(coord1, coord2) {
+    var R = 6371; // Earth's radius in km
+    var dLat = (coord2[1] - coord1[1]) * Math.PI / 180;
+    var dLon = (coord2[0] - coord1[0]) * Math.PI / 180;
+    var lat1 = coord1[1] * Math.PI / 180;
+    var lat2 = coord2[1] * Math.PI / 180;
+
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1) * Math.cos(lat2) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// Create Elevation Chart using Chart.js
+function createElevationChart(distances, elevations) {
+    var ctx = document.getElementById('elevationChart');//.getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: distances,
+            datasets: [{
+                label: 'Elevation (m)',
+                data: elevations,
+                borderColor: 'blue',
+                borderWidth: 1,
+                fill: false,
+                tension: 0.1,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Allow resizing
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { 
+                    display: true, 
+                    title: { display: true, text: 'Distance (km)' },
+                },
+                y: { 
+                    display: true, 
+                    title: { display: true, text: 'Elevation (m)' } 
+                }
+            }
+        }
+    });
+}
 
 gpxSource.once('change', function () {
     console.log("GPX State:", gpxSource.getState());
@@ -49,17 +187,9 @@ gpxSource.once('change', function () {
         alert("No features found in GPX. Check file structure or OpenLayers compatibility.");
     }
     map.getView().fit(gpxSource.getExtent(), { duration: 1000, padding: [50, 50, 50, 50] });
+
+    var elevationData = extractElevationData(gpxSource);
+    createElevationChart(elevationData.distances, elevationData.elevations);
 });
 
-// Debug: Check if KML loads
-//kmlSource.once('change', function () {
-//    console.log("KML State:", kmlSource.getState());
-//    console.log("Number of features:", kmlSource.getFeatures().length);
-//    
-//    if (kmlSource.getFeatures().length === 0) {
-//        alert("No features found in KML. Check file structure or OpenLayers compatibility.");
-//    } else {
-//        var extent = kmlSource.getExtent();
-//        map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
-//    }
-//});
+
