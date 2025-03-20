@@ -1,0 +1,65 @@
+name: Auto-Update KML File
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"  # Runs every 2 hours
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-kml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Set Up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Calculate Dynamic d2 Time (24 Hours Ago)
+        id: time
+        run: |
+          if [[ "$OSTYPE" == "darwin"* ]]; then
+            D2=$(date -u -v-24H +"%Y-%m-%dT%H:%MZ")  # macOS
+          else
+            D2=$(date -u -d '24 hours ago' +"%Y-%m-%dT%H:%MZ")  # Linux
+          fi
+          echo "D2=$D2" >> $GITHUB_ENV
+
+      - name: Fetch KML File
+        run: |
+          KML_URL="https://share.garmin.com/feed/share/DrewAT?d1=2025-03-14T12:00z&d2=${{ env.D2 }}"
+          echo "Fetching latest KML from: $KML_URL"
+          curl -s -o data/drewAT_temp.kml "$KML_URL"
+
+      - name: Check for Empty or Missing File
+        run: |
+          if [ ! -s data/drewAT_temp.kml ]; then
+            echo "KML download failed. Exiting."
+            exit 1
+          fi
+
+      - name: Remove Timestamp from KML (Ignore Line 4)
+        run: |
+          tail -n +5 data/drewAT.kml > data/drewAT_clean.kml 2>/dev/null || true
+          tail -n +5 data/drewAT_temp.kml > data/drewAT_clean_temp.kml
+
+      - name: Compare Files and Update if Changed
+        run: |
+          if cmp -s data/drewAT_clean_temp.kml data/drewAT_clean.kml; then
+            echo "No meaningful changes detected. Exiting."
+            exit 0
+          else
+            echo "KML file has changed. Updating..."
+            mv data/drewAT_temp.kml data/drewAT.kml
+          fi
+
+      - name: Commit and Push Changes
+        run: |
+          git add data/drewAT.kml
+          git commit -m "Auto-update drewAT.kml (d2=${{ env.D2 }})" || exit 0
+          git push
+
