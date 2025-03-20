@@ -13,28 +13,6 @@ var map = new ol.Map({
     })
 });
 
-//var kmlSource = new ol.source.Vector({
-//    url: 'data/test.kml',
-//    format: new ol.format.KML()
-//});
-//var kmlLayer = new ol.layer.Vector({
-//    source: kmlSource
-//});
-//map.addLayer(kmlLayer);
-//
-// Debug: Check if KML loads
-//kmlSource.once('change', function () {
-//    console.log("KML State:", kmlSource.getState());
-//    console.log("Number of features:", kmlSource.getFeatures().length);
-//    
-//    if (kmlSource.getFeatures().length === 0) {
-//        alert("No features found in KML. Check file structure or OpenLayers compatibility.");
-//    } else {
-//        var extent = kmlSource.getExtent();
-//        map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
-//    }
-//});
-
 var gpxSource = new ol.source.Vector({
     url: 'data/full-at.gpx',
     format: new ol.format.GPX()
@@ -53,6 +31,55 @@ map.addLayer(gpxLayer);
 gpxSource.on('error', function (evt) {
     console.error("Error loading GPX file:", evt);
 });
+
+var kmlSource = new ol.source.Vector({
+    url: 'data/drewAT.kml',
+    format: new ol.format.KML({
+        extractStyles: false
+    })
+});
+var kmlLayer = new ol.layer.Vector({
+    source: kmlSource,
+    style: function (feature) {
+        var geometry = feature.getGeometry();
+        
+        // Check if the feature is a point (waypoint)
+        if (geometry instanceof ol.geom.Point) {
+            return new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 5,  // Size of the dot
+                    fill: new ol.style.Fill({ color: 'blue' }),  // Dot color
+                    stroke: new ol.style.Stroke({ color: 'white', width: 1 }) // Optional outline
+                })
+            });
+        }
+        
+        // Check if the feature is a LineString (track path)
+        if (geometry instanceof ol.geom.LineString) {
+            return new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'blue',  // Line color
+                    width: 2  // Line thickness
+                })
+            });
+        }
+    }
+});
+map.addLayer(kmlLayer);
+
+// Debug: Check if KML loads
+kmlSource.once('change', function () {
+    console.log("KML State:", kmlSource.getState());
+    console.log("Number of features:", kmlSource.getFeatures().length);
+    
+    if (kmlSource.getFeatures().length === 0) {
+        alert("No features found in KML. Check file structure or OpenLayers compatibility.");
+    } else {
+        var extent = kmlSource.getExtent();
+        map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
+    }
+});
+
 
 // function to process LineString and extract elevation
 function processLineString(lineString, elevations, distances, totalDistance, totalGain, totalLoss, lastElevation) {
