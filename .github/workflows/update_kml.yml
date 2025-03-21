@@ -57,9 +57,12 @@ jobs:
             mv data/drewAT_temp.kml data/drewAT.kml
           fi
 
-      - name: Commit and Push Changes
+      - name: Commit and Push Changes to `main`
         run: |
+          git checkout main  # Ensure we're on `main` before committing
+          git pull origin main  # Prevent conflicts
           git add data/drewAT.kml
           git commit -m "Auto-update drewAT.kml (d2=${{ env.D2 }})" || exit 0
-          git push
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/mdayao/where-is-drew.git main
+
 
