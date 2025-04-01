@@ -1,26 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photos - Drew's Hike</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trail Log - Drew's Hike</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .trail-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .trail-img, .carousel-inner img {
+      max-height: 500px;
+      object-fit: contain;
+      width: 100%;
+      border-radius: 8px;
+    }
+    .trail-body h6 {
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .trail-body {
+      padding-left: 1rem;
+    }
+    @media (max-width: 768px) {
+      .trail-body {
+        padding-left: 0;
+        padding-top: 1rem;
+      }
+    }
+    /* Make carousel control icons darker and more visible */
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      background-color: rgba(0, 0, 0, 0.6); /* semi-transparent black */
+      border-radius: 50%;
+      background-size: 70% 70%;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  </style>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <div id=header-placeholder></div>
+  <div id="header-placeholder"></div>
 
-    <!-- Placeholder Content -->
-    <div class="container mt-5 text-center">
-        <h1>Coming soon</h1>
-    </div>
+  <div class="container my-5">
+    <h2 class="text-center mb-4">The Trail Log</h2>
+    <p class="text-center">
+    <i>This page is updated whenever Monica has free time... </i>
+    </p>
+    <div id="photo-log"></div>
+  </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="include.js"></script>
 
-    <script src='include.js'></script>
+  <script>
+  async function loadTrailUpdates() {
+    try {
+      const response = await fetch('photos.json');
+      const data = await response.json();
+      const container = document.getElementById('photo-log');
+
+      // Sort by date descending (newest first)
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      data.forEach((entry, idx) => {
+        const images = entry.images || [];
+        const card = document.createElement('div');
+        card.className = 'trail-card card shadow-sm p-3';
+
+        const startDate = new Date("2025-03-13T00:00:00");
+        const entryDate = new Date(entry.date);
+        const dayDiff = Math.floor((entryDate - startDate) / (1000 * 60 * 60 * 24));
+        const formattedDate = entryDate.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        const dateLabel = `${formattedDate} · Day ${dayDiff}`;
+
+        let media = '';
+        if (images.length === 1) {
+          media = `<img src="${images[0]}" class="trail-img img-fluid" alt="Trail photo">`;
+        } else if (images.length > 1) {
+          const carouselId = `carousel-${idx}`;
+          const slides = images.map((img, i) =>
+            `<div class="carousel-item ${i === 0 ? 'active' : ''}">
+              <img src="${img}" class="d-block w-100 trail-img img-fluid" alt="Trail photo ${i + 1}">
+            </div>`
+          ).join('');
+          media = `
+            <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">${slides}</div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+              </button>
+            </div>`;
+        }
+        const content = `
+          <div class="row g-3">
+            <div class="col-12">${media}</div>
+            <div class="col-12 trail-body">
+              <p class="text-muted mb-1"><strong>${dateLabel}</strong></p>
+              <p class="mb-0">${entry.message}</p>
+            </div>
+          </div>
+        `;
+
+
+        card.innerHTML = content;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error("Error loading trail data:", err);
+    }
+  }
+
+  loadTrailUpdates();
+</script>
 
 </body>
 </html>
