@@ -73,8 +73,8 @@
         const card = document.createElement('div');
         card.className = 'trail-card card shadow-sm p-3';
 
-        const startDate = new Date("2025-03-13T00:00:00");
-        const entryDate = new Date(entry.date);
+        const startDate = new Date("2025-03-14T00:00:00");
+        const entryDate = new Date(entry.date+"T00:00:00");
         const dayDiff = Math.floor((entryDate - startDate) / (1000 * 60 * 60 * 24));
         const formattedDate = entryDate.toLocaleDateString('en-US', {
           weekday: 'long',
