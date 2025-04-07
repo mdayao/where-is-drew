@@ -1,7 +1,7 @@
 [
   {
     "date": "2025-03-14",
-    "images": ["images/day0.jpg"],
+    "images": ["images/day0.webp"],
     "message": "Day 0 on trail: didn't sleep much on the plane from SF to Roanoke, but was still energized when I landed. Walked to pick up some food and supplies, I somehow ended up with like 17lbs of food 😅. then took a bus and shuttle to the trail. Before I even stepped foot on the trail I ended up with a pocket full of yogurt 🤣. Hike started with a big climb to a beautiful vista at McAfees knob. There looks to be tons of bouldering potential around the knob. Then kept hiking past Tinker cliffs, another beautiful vista, with lots of short trad potential. Stayed the night at Lamberts meadow shelter"
   },
   {
@@ -11,28 +11,78 @@
   },
   {
     "date": "2025-03-16",
-    "images": ["images/day2.jpg"],
+    "images": ["images/day2.webp"],
     "message": "Day 2- thunderstorm never came, but there was crazy dense fog in the middle of the night, couldn't see more than 3 feet. Insanely windy and damp all morning. Left the shelter at noon since it was on top of the Knob for a better time at the next shelter. Weather got better as soon as I left the knob."
   },
   {
       "date": "2025-03-17",
-      "images": ["images/day3.jpg"],
+      "images": ["images/day3.webp"],
       "message": "Day 3- Slept in till almost 9 despite the sun bearing down on me. Trail started weaving through Blue Ridge Parkway with beautiful vistas on both sides. Was about to go to sleep for the night when I met the first other thru hiker: Rope Bunny, who had just finished a 25 mile day (what I had just done in the past 2.5 days)."
   },
   {
       "date": "2025-03-18",
-      "images": ["images/day4.jpg"],
+      "images": ["images/day4.webp"],
       "message": "Day 4- After setting off from the shelter ahead of Rope Bunny, we did a bunch of back and forth for the rest of the morning, stopping for various things like water. As Rope Bunny told me, 'You can never really say goodbye on the trail.' We met for the possibly the last time (assuming I never catch up) at the shelter (more like a mansion) I was staying at for the night. Still had most of the day left, so played a bunch of solitaire (assuming I remembered the rules correctly)."
   },
   {
       "date": "2025-03-19",
-      "images": ["images/day5-1.jpg", "images/day5-2.jpg", "images/day5-3.jpg"],
+      "images": ["images/day5-1.webp", "images/day5-2.webp", "images/day5-3.webp"],
       "message": "Day 5- Met a section hiker in the morning who told me Wigle Distillery in Pittsburgh was named after one of the first people granted a presidential pardon, his ancestor. Hiked to the highest point I will reach on the trail, Apple Orchard Mountain at 4,225 ft, until Mt. Moosilauke in NH (highest point on the trail is Clingmans Dome in TN). Walked under the Guillotine, a large boulder suspended between other boulders. Made it to my shelter for the night where I met another section hiker who is on his last night of this section and gave me some food (a pizza MRE among other things)."
   },
   {
       "date": "2025-03-20",
-      "images": ["images/day6-1.jpg", "images/day6-2.jpg"],
+      "images": ["images/day6-1.webp", "images/day6-2.webp"],
       "message": "Got a beautiful view of the James River, which I then had to walk down 2000 ft to get to. Walked across the James River Foot Bridge, the longest foot-use-only bridge on the AT to highway 501. Stuck my thumb out for my first hitch ever and the first car that passed pulled over and gave me a ride to Glasgow VA. Got some wonderful Italian food from the local restaurant and called it a night at the towns hiker shelter."
+  },
+  {
+      "date": "2025-03-21",
+      "images": [],
+      "message": "First 0 day. Did my laundry for the first time, put everything in the washer and dryer as I sat commando in my rain gear. Resupplied and relaxed."
+  },
+  {
+      "date": "2025-03-22",
+      "images": ["images/0322-1.webp", "images/0322-2.webp"],
+      "message": "Got a free shower from a hostel that wasn't even open. Hitched back to the trail. Tons of people on this section of the trail from trail runners to section hikers. Accidentally went 10 miles (mostly uphill) with only 1 L of water. Busy shelter tonight with 5 other people staying."
+  },
+  {
+      "date": "2025-03-23",
+      "images": ["images/0323.webp"],
+      "message": "Got some advice from a thru hiker finishing his SOBO journey that was stopped by Helene last year. Spent most of the morning playing leapfrog with section hikers on the same itinerary as me. Finished the day with a long climb to the shelter. A day hiker made some camp bread with honey butter for me. Another busy night in the shelter."
+  },
+  {
+      "date": "2025-03-24",
+      "images": [ "images/0324.webp"],
+      "message": "Rainy morning start up to the peak of Cole Mountain, an appalachian bald. When I got to the peak, fog started rolling in that stayed for a couple of hours. Wet rocks caused me to slip a foot into one of the creeks I was going over. Once I got to the shelter I went to get water and once again doused my foot in a bog. 5 people at the shelter again, possibly last night with the 3 section hikers I have been hiking with for the past few days."
+  },
+  {
+      "date": "2025-03-25",
+      "images": [ "images/0325.webp"],
+      "message": "Long decline at the start of the day, just to go right back up to the same elevation by the end of the day. Spent the morning trying to outrun afternoon rain, wasn't successful but the rain wasn't too bad. First night alone in a shelter in a while."
+  },
+  {
+      "date": "2025-03-26",
+      "images": [ "images/0326-1.webp", "images/0326-2.webp"],
+      "message": "Woke up before sunrise, packed and got ready to go as fast as possible. Then started booking it for Waynesboro VA, about 20 miles away. Made it to a shelter for lunch where I met a PCT thru hiker checking out the AT for the first time. Made it to Waynesboro by 3:45, making 20 miles in just about 7 and a half hours. Got some mail, did laundry and had a nice Indian dinner. Unfortunately the free tenting area wasn't open so I was forced to spend the night in a hotel and took a nice warm shower."
+  },
+  {
+      "date": "2025-03-27",
+      "images": [ "images/0327-1.webp", "images/0327-2.webp", "images/0327-3.webp"],
+      "message": "Had as much food as I could at the mediocre continental breakfast at the hotel. Went to the post office to get rid of a couple things. Resupplied at Kroger for all of Shenandoah. Had a huge sandwich at the local deli (Delly Up) and then got a hitch to the trail. Short hike with a lot of other day hikers. Was too full from town food to have dinner, just had some chocolate. 2 other hikers joined at the shelter, but cowboy camped away from the shelter and didn't say much to me."
+  },
+  {
+      "date": "2025-03-28",
+      "images": [],
+      "message": "Boring day with no vistas. I was worried about no springs on the trail until the next shelter, so I mistakenly brought 3 liters. Only ended up using 1 before I got to the next shelter. Met 3 other thru hikers at the shelter, 2 of whom stayed with me the previous night. 1 thru hiker, Jimni, was just 20 miles into her journey while the other 2, a father daughter pair, started in Georgia mid-February. 4 other backpackers joined at the shelter for the night."
+  },
+  {
+      "date": "2025-03-29",
+      "images": ["images/0329.webp"],
+      "message": "Started the day by getting to the rocky summit ledge of Blackrock Mountain. Lots of vistas overlooking the valley below. 1st real hot day on the trail. A bit underwhelmed by Shenandoah; hasn't felt very secluded as you can almost always hear cars (or motorcycles) on Skyline Drive. A section hiker named Greenwave that stayed the night at the same shelter before joined me for another night."
+  },
+  {
+      "date": "2025-03-30",
+      "images": ["images/0330-1.webp", "images/0330-2.webp", "images/0330-3.webp"],
+      "message": "Very chill morning with mostly flat trail. Spent a lot of the morning leapfrogging Greenwave. Eventually, I made it to Lewis Mountain Campstore, one of two open stores in the park, where i bought snacks and some ice cream. Hung out at the campstore to eat lunch and charge my phone. Then continued to Rock Spring Hut, seeing some wild turkeys on the way. Met up with the father daughter thru hiker pair, Too Easy and Frozen at the shelter where we could hear lots of children staying at the Cabin 0.1 miles down the hill."
   }
 ]
 
