@@ -42,12 +42,18 @@ var kmlLayer = new ol.layer.Vector({
     source: kmlSource,
     style: function (feature) {
         var geometry = feature.getGeometry();
+        const coord = geometry.getCoordinates();
+
+        // Suppress blue marker for the first coordinate
+        if (firstCoord && ol.coordinate.equals(coord, firstCoord)) {
+            return null; // Don't style it — we'll use the custom marker
+        }
         
         // Check if the feature is a point (waypoint)
         if (geometry instanceof ol.geom.Point) {
             return new ol.style.Style({
                 image: new ol.style.Circle({
-                    radius: 5,  // Size of the dot
+                    radius: 4,  // Size of the dot
                     fill: new ol.style.Fill({ color: 'blue' }),  // Dot color
                     stroke: new ol.style.Stroke({ color: 'white', width: 1 }) // Optional outline
                 })
@@ -67,16 +73,61 @@ var kmlLayer = new ol.layer.Vector({
 });
 map.addLayer(kmlLayer);
 
-// Debug: Check if KML loads
+let firstCoord = null
 kmlSource.once('change', function () {
-    console.log("KML State:", kmlSource.getState());
-    console.log("Number of features:", kmlSource.getFeatures().length);
     
     if (kmlSource.getFeatures().length === 0) {
         alert("No features found in KML. Check file structure or OpenLayers compatibility.");
     } else {
         var extent = kmlSource.getExtent();
         map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
+    }
+
+    const features = kmlSource.getFeatures();
+    for (let i = 0; i < features.length; i++) {
+        const geom = features[i].getGeometry();
+        if (geom instanceof ol.geom.LineString) {
+            firstCoord = geom.getCoordinates()[0];
+            break;
+        }
+    }
+
+    // Add a "start" marker from KML track
+    var kmlFeatures = kmlSource.getFeatures();
+    for (var i = 0; i < kmlFeatures.length; i++) {
+        var geom = kmlFeatures[i].getGeometry();
+        if (geom instanceof ol.geom.LineString) {
+            var coords = geom.getCoordinates();
+            var startCoord = coords[0];
+
+            // Tooltip overlay
+            var markerEl = document.createElement('div');
+            markerEl.className = 'start-marker';
+            markerEl.innerHTML = `
+                <div class="sign">START</div>
+                <div class="post"></div>
+            `;
+            markerEl.setAttribute('data-bs-toggle', 'tooltip');
+            markerEl.setAttribute('data-bs-placement', 'top');
+            markerEl.setAttribute('title', 'Drew started here!');
+            
+            document.body.appendChild(markerEl);
+            new bootstrap.Tooltip(markerEl);  // Initialize Bootstrap tooltip
+            
+            // Create an OpenLayers overlay with this DOM element
+            const bootstrapOverlay = new ol.Overlay({
+                element: markerEl,
+                positioning: 'bottom-center',
+                stopEvent: false
+            });
+            bootstrapOverlay.setPosition(startCoord);
+            map.addOverlay(bootstrapOverlay);
+            
+            // Activate Bootstrap tooltips
+            var tooltip = new bootstrap.Tooltip(markerEl);  // Requires Bootstrap 5
+    
+            break; // only add one marker for the first LineString
+        }
     }
 });
 
