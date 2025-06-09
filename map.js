@@ -14,7 +14,7 @@ var map = new ol.Map({
 });
 
 var gpxSource = new ol.source.Vector({
-    url: 'data/full-at.gpx',
+    url: 'data/ATfullres.gpx',
     format: new ol.format.GPX()
 });
 var gpxLayer = new ol.layer.Vector({
