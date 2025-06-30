@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <kml xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <name>KML Export 6/27/2025 3:12:56 AM</name>
+    <name>KML Export 6/30/2025 6:12:30 PM</name>
     <Style id="style_emergency">
       <IconStyle>
         <colorMode>normal</colorMode>
@@ -63485,7 +63485,7 @@
         </Point>
       </Placemark>
       <Placemark>
-        <name>Andrew McNutt</name>
+        <name />
         <visibility>true</visibility>
         <description />
         <TimeStamp>
@@ -63555,6 +63555,79 @@
           <extrude>false</extrude>
           <altitudeMode>absolute</altitudeMode>
           <coordinates>-68.857261,45.918828,457.68</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Andrew McNutt</name>
+        <visibility>true</visibility>
+        <description />
+        <TimeStamp>
+          <when>2025-06-29T17:15:45Z</when>
+        </TimeStamp>
+        <styleUrl>#style_5074224</styleUrl>
+        <ExtendedData>
+          <Data name="Id">
+            <value>848150350</value>
+          </Data>
+          <Data name="Time UTC">
+            <value>6/29/2025 5:15:45 PM</value>
+          </Data>
+          <Data name="Time">
+            <value>6/29/2025 5:15:45 PM</value>
+          </Data>
+          <Data name="Name">
+            <value>Andrew McNutt</value>
+          </Data>
+          <Data name="Map Display Name">
+            <value>Andrew McNutt</value>
+          </Data>
+          <Data name="Device Type">
+            <value>inReach Mini 2</value>
+          </Data>
+          <Data name="IMEI">
+            <value>301434036522400</value>
+          </Data>
+          <Data name="Incident Id">
+            <value />
+          </Data>
+          <Data name="Latitude">
+            <value>37.367678</value>
+          </Data>
+          <Data name="Longitude">
+            <value>-80.117196</value>
+          </Data>
+          <Data name="Elevation">
+            <value>691.44 m from MSL</value>
+          </Data>
+          <Data name="Velocity">
+            <value>3.0 km/h</value>
+          </Data>
+          <Data name="Course">
+            <value>247.50 ° True</value>
+          </Data>
+          <Data name="Valid GPS Fix">
+            <value>True</value>
+          </Data>
+          <Data name="In Emergency">
+            <value>False</value>
+          </Data>
+          <Data name="Text">
+            <value />
+          </Data>
+          <Data name="Event">
+            <value>Tracking turned on from device.</value>
+          </Data>
+          <Data name="Device Identifier">
+            <value />
+          </Data>
+          <Data name="SpatialRefSystem">
+            <value>WGS84</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <extrude>false</extrude>
+          <altitudeMode>absolute</altitudeMode>
+          <coordinates>-80.117196,37.367678,691.44</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -64433,7 +64506,8 @@
 -68.906013,45.906136,1497.51
 -68.885993,45.906405,1013.92
 -68.862561,45.91592,599.37
--68.857261,45.918828,457.68</coordinates>
+-68.857261,45.918828,457.68
+-80.117196,37.367678,691.44</coordinates>
         </LineString>
       </Placemark>
     </Folder>
