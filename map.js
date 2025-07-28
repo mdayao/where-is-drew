@@ -13,18 +13,42 @@ var map = new ol.Map({
     })
 });
 
+//var gpxSource = new ol.source.Vector({
+//    url: 'data/ATfullres.gpx',
+//    format: new ol.format.GPX()
+//});
 var gpxSource = new ol.source.Vector({
-    url: 'data/ATfullres.gpx',
-    format: new ol.format.GPX()
+    url: 'data/2025_appalachian-trail/doc.kml',
+    format: new ol.format.KML({
+        extractStyles: false // Disable default styles
+    })
 });
+//var gpxLayer = new ol.layer.Vector({
+//    source: gpxSource,
+//    style: new ol.style.Style({
+//        stroke: new ol.style.Stroke({
+//            color: '#ff0000',
+//            width: 3
+//        })
+//    })
+//});
 var gpxLayer = new ol.layer.Vector({
     source: gpxSource,
-    style: new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: '#ff0000',
-            width: 3
-        })
-    })
+    // style only the LineString geometries (your route)
+    style: function(feature) {
+        let geom = feature.getGeometry();
+        let t = geom && geom.getType();
+        if (t === 'LineString' || t === 'MultiLineString' || t === 'GeometryCollection') {
+            const name = feature.get('name');
+            if (name.includes("AT Treadway")) {
+                return new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: '#ff0000', width: 3 })
+                });
+            }
+        }
+        // else: no style → Points, Polygons, etc. are skipped
+        return null;
+    }
 });
 map.addLayer(gpxLayer);
 
@@ -73,148 +97,6 @@ var kmlLayer = new ol.layer.Vector({
     }
 });
 map.addLayer(kmlLayer);
-
-//var map = new ol.Map({
-//    target: 'map',
-//    layers: [
-//        new ol.layer.Tile({
-//            source: new ol.source.OSM()
-//        })
-//    ],
-//    view: new ol.View({
-//        center: ol.proj.fromLonLat([-98.5795, 39.8283]),
-//        zoom: 5
-//    })
-//});
-//
-//// GPX layer: full track (red)
-//var gpxSource = new ol.source.Vector({
-//    url: 'data/ATfullres.gpx',
-//    format: new ol.format.GPX()
-//});
-//var gpxLayer = new ol.layer.Vector({
-//    source: gpxSource,
-//    style: new ol.style.Style({
-//        stroke: new ol.style.Stroke({
-//            color: '#ff0000',
-//            width: 3
-//        })
-//    })
-//});
-//map.addLayer(gpxLayer);
-//
-//gpxSource.on('error', function(evt) {
-//    console.error("Error loading GPX file:", evt);
-//});
-//
-//// KML source (all waypoints & track)
-//var kmlSource = new ol.source.Vector({
-//    url: 'data/drewAT.kml',
-//    format: new ol.format.KML({ extractStyles: false })
-//});
-//
-//// Cutoff date for splitting NOBO vs SOBO
-//const cutoffDate = new Date('2025-06-28T00:00:00Z');
-//// Hold split feature sets
-//let splitResult = { beforeFeatures: [], afterFeatures: [] };
-//
-//// Function to split KML features by timestamp
-//function splitKMLByDate() {
-//    var all = kmlSource.getFeatures();
-//    var before = [];
-//    var after = [];
-//    all.forEach(function(f) {
-//        var when = f.get('when') || f.get('TimeStamp') || f.get('timestamp');
-//        if (!when) return;  // skip if no time property
-//        var dt = new Date(when);
-//        if (dt < cutoffDate) {
-//            before.push(f.clone());
-//        } else {
-//            after.push(f.clone());
-//        }
-//    });
-//
-//    splitResult = { beforeFeatures: before, afterFeatures: after };
-//    return splitResult;
-//}
-//
-//// Create separate vector layers for NOBO and SOBO
-//function addSplitLayers() {
-//    var { beforeFeatures, afterFeatures } = splitResult;
-//
-//    var sourceNOBO = new ol.source.Vector({ features: beforeFeatures });
-//    var sourceSOBO = new ol.source.Vector({ features: afterFeatures });
-//
-//    // NOBO style (blue)
-//    var layerNOBO = new ol.layer.Vector({
-//        source: sourceNOBO,
-//        style: function(feature) {
-//            var geom = feature.getGeometry();
-//            if (geom instanceof ol.geom.Point) {
-//                return new ol.style.Style({
-//                    image: new ol.style.Circle({
-//                        radius: 4,
-//                        fill: new ol.style.Fill({ color: 'blue' }),
-//                        stroke: new ol.style.Stroke({ color: 'white', width: 1 })
-//                    })
-//                });
-//            }
-//            if (geom instanceof ol.geom.LineString) {
-//                return new ol.style.Style({
-//                    stroke: new ol.style.Stroke({ color: 'blue', width: 2 })
-//                });
-//            }
-//            return null;
-//        }
-//    });
-//
-//    // SOBO style (red)
-//    var layerSOBO = new ol.layer.Vector({
-//        source: sourceSOBO,
-//        style: function(feature) {
-//            var geom = feature.getGeometry();
-//            if (geom instanceof ol.geom.Point) {
-//                return new ol.style.Style({
-//                    image: new ol.style.Circle({
-//                        radius: 4,
-//                        fill: new ol.style.Fill({ color: 'red' }),
-//                        stroke: new ol.style.Stroke({ color: 'white', width: 1 })
-//                    })
-//                });
-//            }
-//            if (geom instanceof ol.geom.LineString) {
-//                return new ol.style.Style({
-//                    stroke: new ol.style.Stroke({ color: 'red', width: 2 })
-//                });
-//            }
-//            return null;
-//        }
-//    });
-//
-//    map.addLayer(layerNOBO);
-//    map.addLayer(layerSOBO);
-//}
-//
-//// Event: when KML is loaded, split and add layers
-//kmlSource.once('change', function() {
-//    if (kmlSource.getFeatures().length === 0) {
-//        alert("No features found in KML.");
-//        return;
-//    }
-//
-//    // split and add new layers
-//    splitKMLByDate();
-//    addSplitLayers();
-//
-//    // fit map to all features
-//    var extent = kmlSource.getExtent();
-//    map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
-//
-//    console.log("KML loaded and split into NOBO & SOBO segments");
-//    kmlReady = true;
-//    tryRunAnalysis();
-//});
-
 
 // Function to find the closest point index in GPX coordinates
 function findClosestPointIndex(targetCoord, gpxCoords) {
@@ -405,34 +287,6 @@ function runDistanceAnalysis() {
         }
     }
 }
-//// Modified runDistanceAnalysis to handle both segments & sum distances
-//function runDistanceAnalysis() {
-//    var elevationData = extractElevationData(gpxSource);
-//    var gpxCoords = elevationData.coords;
-//    var gpxDistances = elevationData.distances;
-//
-//    var totalKm = 0;
-//    ['beforeFeatures', 'afterFeatures'].forEach(function(key) {
-//        splitResult[key].forEach(function(f) {
-//            var geom = f.getGeometry();
-//            if (geom instanceof ol.geom.LineString) {
-//                var coords = geom.getCoordinates();
-//                var startIdx = findClosestPointIndex(coords[0], gpxCoords);
-//                var endIdx = findClosestPointIndex(coords[coords.length - 1], gpxCoords);
-//                var km = Math.abs(parseFloat(gpxDistances[endIdx]) - parseFloat(gpxDistances[startIdx]));
-//                totalKm += km;
-//                console.log((key === 'beforeFeatures' ? 'NOBO' : 'SOBO') + " segment: " + km.toFixed(2) + " km");
-//            }
-//        });
-//    });
-//
-//    console.log("Combined Distance: " + totalKm.toFixed(2) + " km");
-//    var totalDiv = document.getElementById('totalDistance');
-//    if (totalDiv) {
-//        var totalMi = totalKm * 0.621371;
-//        totalDiv.textContent = `Total Distance: ${totalMi.toFixed(0)} miles (${totalKm.toFixed(0)} km)`;
-//    }
-//}
 
 function setStartPoint() {
     const features = kmlSource.getFeatures();
@@ -505,27 +359,6 @@ kmlSource.once('change', () => {
     kmlReady = true;
     tryRunAnalysis();
 });
-
-//// Initialization flags & trigger
-//let gpxReady = false;
-//let kmlReady = false;
-//function tryRunAnalysis() {
-//    if (gpxReady && kmlReady) {
-//        runDistanceAnalysis();
-//        setStartPoint();
-//    }
-//}
-//
-//gpxSource.once('change', function() {
-//    if (gpxSource.getFeatures().length === 0) {
-//        alert("No features found in GPX.");
-//        return;
-//    }
-//    console.log("GPX loaded");
-//    gpxReady = true;
-//    tryRunAnalysis();
-//});
-
 
 
 
