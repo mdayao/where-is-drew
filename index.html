@@ -24,13 +24,17 @@
     <!-- Main Container -->
     <div class="container mt-4">
         <h1 class="text-center">The Appalachian Trail</h1>
-        <p class="text-center">Drew has been on the trail for <span id="daysOnTrail">X</span> days. He is doing a <a href="#flipflop">flip-flop thru-hike</a> and started near Roanoke, VA. 
-        Below is his journey so far.<br>
+        <p class="text-center">
+        <!-- Drew has been on the trail for <span id="daysOnTrail">X</span> days. He is doing a <a href="#flipflop">flip-flop thru-hike</a> and started near Roanoke, VA. 
+            Below is his journey so far.<br> 
+            <small><i>For privacy reasons, there is a delay in location updates.</i></small> -->
         Check out Drew's <a href="photos.html">trail log</a>! <br>
-        <small><i>For privacy reasons, there is a delay in location updates.</i></small>
         </p>
         <!-- <div class="text-center" id="kmlDistance" style="font-weight: bold;"></div> -->
-        <div class="text-center" style="font-weight: bold;">Drew has completed the northern section of the trail (1500mi) and is currently hiking southbound! SOBO mileage updates coming soon.</div>
+        <div class="text-center" style="font-weight: bold;">Drew finished the trail on August 8th! A total of 2,197.4 miles and ~464,500 ft of elevation gain. <br>
+            It took a total of <span id="daysOnTrail">X</span> days (including 19 days off trail), averaging ~17 miles per day.  <br>
+            Congrats Drew!! 🎉🎉🎉
+        </div>
         
 
         
@@ -73,7 +77,8 @@
     // Function to calculate days since March 14
     function updateDaysOnTrail() {
         const startDate = new Date("2025-03-13"); // Adjust if needed
-        const today = new Date();
+        //const today = new Date();
+        const today = new Date("2025-08-08"); // Hardcoded end date for final display
         const diffTime = today - startDate;
         const daysOnTrail = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
